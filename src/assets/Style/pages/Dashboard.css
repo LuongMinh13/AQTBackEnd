@@ -1,0 +1,62 @@
+/* =========================
+   Dashboard
+========================= */
+
+.dashboard {
+  padding-block: 8px 32px;
+}
+
+.dashboard__header {
+  margin-bottom: 24px;
+}
+
+.dashboard__title {
+  margin: 0 0 6px 0;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.dashboard__subtitle {
+  margin: 0;
+  color: #64748b;
+  font-size: 15px;
+}
+
+.dashboard__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.dashboard__stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.dashboard__info-box {
+  padding: 14px 16px;
+  background: #f8fafc;
+  border-radius: 10px;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* La card Palettes prend toute la largeur */
+.dashboard__grid > .db-card:nth-child(3) {
+  grid-column: 1 / -1;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .dashboard__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard__grid > .db-card:nth-child(3) {
+    grid-column: auto;
+  }
+}

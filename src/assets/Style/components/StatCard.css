@@ -1,0 +1,51 @@
+/* =========================
+   StatCard
+========================= */
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 18px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid transparent;
+}
+
+.stat-card__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.stat-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-card__label {
+  font-weight: 500;
+}
+
+.stat-card__value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+/* Tones */
+.stat-card--neutral .stat-card__icon {
+  color: #64748b;
+}
+
+.stat-card--success .stat-card__icon {
+  color: #16a34a;
+}
+
+.stat-card--info .stat-card__icon {
+  color: #2563eb;
+}

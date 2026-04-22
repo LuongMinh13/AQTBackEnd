@@ -1,0 +1,102 @@
+/* =========================
+   DashboardCard
+========================= */
+
+.db-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.db-card__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.db-card__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.db-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.db-card__icon--blue {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.db-card__icon--orange {
+  background: #ffedd5;
+  color: #ea580c;
+}
+
+.db-card__icon--green {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.db-card__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.db-card__subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.db-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.db-card__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+/* Boutons génériques dans le footer */
+.db-card__footer button,
+.db-card__footer .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0f172a;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
+}
+
+.db-card__footer button:hover,
+.db-card__footer .btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}

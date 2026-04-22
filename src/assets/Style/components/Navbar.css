@@ -1,0 +1,152 @@
+/* =========================
+   Navbar
+========================= */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  max-width: 1400px;
+  margin-inline: auto;
+  padding: 14px 24px;
+}
+
+/* Logo */
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.navbar__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  background: #0f172a;
+  color: #ffffff;
+  border-radius: 8px;
+}
+
+.navbar__title {
+  font-size: 16px;
+  letter-spacing: -0.01em;
+}
+
+/* Liens */
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #334155;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.navbar__link:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.navbar__link.is-active {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* Dropdown */
+.navbar__dropdown-wrap {
+  position: relative;
+}
+
+.navbar__caret {
+  transition: transform 0.15s ease;
+}
+
+.navbar__dropdown-btn.is-open {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.navbar__dropdown-btn.is-open .navbar__caret {
+  transform: rotate(180deg);
+}
+
+.navbar__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 200px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1),
+              0 4px 6px -2px rgba(15, 23, 42, 0.05);
+  padding: 6px;
+  list-style: none;
+  margin: 0;
+  z-index: 60;
+}
+
+.navbar__menu-item {
+  display: block;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #334155;
+  border-radius: 6px;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.navbar__menu-item:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.navbar__menu-item.active {
+  background: #f1f5f9;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+/* Responsive basique */
+@media (max-width: 768px) {
+  .navbar__inner {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .navbar__links {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .navbar__link {
+    white-space: nowrap;
+  }
+}
