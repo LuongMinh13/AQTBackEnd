@@ -82,8 +82,15 @@ COL_GERBABLE   = "I"
 # ----- Cellules tarif (bas de la fiche) -----
 CELL_COUT_HT          = "G56"   # Transport Net (hors TVA, excl. Fuel)
 CELL_FUEL_SURCHARGE   = "H59"   # Fuel surcharge SG
-CELL_TOTAL_AUTRES     = "G63"   # Total autres frais
-CELL_TOTAL_TRANSPORT  = "G65"   # Total Transport (hors TVA, incl. Fuel)
+# Assurance Ad Valorem (optionnelle) :
+#   C61 = libellé "Assurance Ad Valorem <valeur>€"
+#   D61 = montant (valeur × taux/100)
+# Quand l'assurance est désactivée, les deux cellules sont vidées pour
+# éviter qu'un contenu résiduel du template reste affiché.
+CELL_ASSURANCE_LABEL  = "C61"
+CELL_ASSURANCE_VALUE  = "D61"
+CELL_TOTAL_AUTRES     = "G63"   # Total autres frais (fuel + assurance)
+CELL_TOTAL_TRANSPORT  = "G65"   # Total Transport (hors TVA, incl. Fuel + assurance)
 
 
 # ====================
@@ -388,10 +395,35 @@ def collect_updates(data):
 
     updates[CELL_COUT_HT]         = round(cout_ht, 2)
     updates[CELL_FUEL_SURCHARGE]  = round(fuel, 2)
-    # Total autres frais = fuel (pas de hayon par défaut)
-    updates[CELL_TOTAL_AUTRES]    = round(fuel, 2)
-    # Total Transport (hors TVA) = coût HT + surcharge carburant
-    updates[CELL_TOTAL_TRANSPORT] = round(cout_total, 2)
+
+    # ----- Assurance Ad Valorem (optionnelle) -----
+    # Schéma payload : { enabled: bool, valeur: number, taux: number, montant: number }
+    # `montant` est recalculé côté serveur (= valeur × taux / 100). On lui
+    # fait confiance ici, mais on protège quand même par _to_num.
+    assurance = data.get("assurance") or {}
+    ass_enabled = bool(assurance.get("enabled"))
+    ass_montant = _to_num(assurance.get("montant"))
+    ass_valeur = _to_num(assurance.get("valeur"))
+
+    if ass_enabled and ass_montant > 0:
+        # Format français : "32515.75" → "32515,75" ; "32515.0" → "32515".
+        if ass_valeur == int(ass_valeur):
+            valeur_str = str(int(ass_valeur))
+        else:
+            valeur_str = f"{ass_valeur:.2f}".replace(".", ",")
+        updates[CELL_ASSURANCE_LABEL] = f"Assurance Ad Valorem {valeur_str}€"
+        updates[CELL_ASSURANCE_VALUE] = round(ass_montant, 2)
+    else:
+        # Vide les cellules pour éviter qu'une trace de l'éxécution
+        # précédente subsiste si le template les avait pré-remplies.
+        updates[CELL_ASSURANCE_LABEL] = ""
+        updates[CELL_ASSURANCE_VALUE] = ""
+        ass_montant = 0.0
+
+    # Total autres frais = fuel + assurance (hayon par défaut = 0)
+    updates[CELL_TOTAL_AUTRES]    = round(fuel + ass_montant, 2)
+    # Total Transport (hors TVA) = coût HT + fuel + assurance
+    updates[CELL_TOTAL_TRANSPORT] = round(cout_total + ass_montant, 2)
 
     palettes = data.get("palettes") or []
     if len(palettes) > len(COLISAGE_ROWS):

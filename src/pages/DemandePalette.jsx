@@ -282,6 +282,20 @@ export default function DemandePalette() {
     return false;
   });
 
+  // ---------- Assurance Ad Valorem (optionnelle) ----------
+  // Si on duplique depuis l'historique, on restaure l'état exact.
+  const [assuranceEnabled, setAssuranceEnabled] = useState(() =>
+    Boolean(duplicateFrom?.assurance?.enabled),
+  );
+  const [valeurMarchandise, setValeurMarchandise] = useState(() => {
+    const v = duplicateFrom?.assurance?.valeur;
+    return v != null && v !== "" ? String(v) : "";
+  });
+  const [tauxAssurance, setTauxAssurance] = useState(() => {
+    const t = duplicateFrom?.assurance?.taux;
+    return t != null && t !== "" ? String(t) : "2";
+  });
+
   // ---------- Palettes : saisie simplifiée ----------
   // Détection : si toutes les palettes dupliquées partagent les mêmes
   // poids/dimensions, on garde le mode "identiques" (sinon on bascule).
@@ -316,6 +330,18 @@ export default function DemandePalette() {
   const tarifCalc = useMemo(() => {
     const margeTotal = Number(margeTotalPct) || 0;
 
+    // Montant assurance recalculé en parallèle. Il s'ajoute en passthrough
+    // (sans marge) au Prix Total HT/TTC. L'assurance est exonérée de TVA en
+    // France pour le transport, donc même montant ajouté HT et TTC.
+    const valeurNum = Number(valeurMarchandise);
+    const tauxNum = Number(tauxAssurance);
+    const assuranceMontant =
+      assuranceEnabled &&
+      Number.isFinite(valeurNum) && valeurNum > 0 &&
+      Number.isFinite(tauxNum) && tauxNum > 0
+        ? (valeurNum * tauxNum) / 100
+        : 0;
+
     const mkDefault = (overrides = {}) => ({
       departDept: null,
       destDept: null,
@@ -326,8 +352,9 @@ export default function DemandePalette() {
       margeTotal,
       prixHT: 0,
       prixTTC: 0,
-      prixTotalHT: 0,
-      prixTotalTTC: 0,
+      assuranceMontant,
+      prixTotalHT: 0 + assuranceMontant,
+      prixTotalTTC: 0 + assuranceMontant,
       ...overrides,
     });
 
@@ -381,9 +408,10 @@ export default function DemandePalette() {
     // Prix de vente — piloté par la marge totale (source unique)
     const prixHT = coutTotal * (1 + margeTotal / 100);
     const prixTTC = prixHT * TVA;
-    // Sans MBE, prix total = prix transport
-    const prixTotalHT = prixHT;
-    const prixTotalTTC = prixTTC;
+    // Prix total = prix transport + assurance (l'assurance ne porte pas de
+    // marge et n'est pas soumise à TVA → ajoutée à l'identique HT et TTC).
+    const prixTotalHT = prixHT + assuranceMontant;
+    const prixTotalTTC = prixTTC + assuranceMontant;
 
     return {
       status: "ok",
@@ -396,10 +424,20 @@ export default function DemandePalette() {
       margeTotal,
       prixHT,
       prixTTC,
+      assuranceMontant,
       prixTotalHT,
       prixTotalTTC,
     };
-  }, [rates, enlevement.cp, livraison.cp, nbPalettes, margeTotalPct]);
+  }, [
+    rates,
+    enlevement.cp,
+    livraison.cp,
+    nbPalettes,
+    margeTotalPct,
+    assuranceEnabled,
+    valeurMarchandise,
+    tauxAssurance,
+  ]);
 
   // ----- Handlers sync bidirectionnelle : tout se ramène à margeTotalPct -----
   // (on ne peut recalculer la marge que si coutTotal > 0)
@@ -551,6 +589,15 @@ export default function DemandePalette() {
         coutHT: tarifCalc?.coutHT ?? 0,
         fuel: tarifCalc?.fuel ?? 0,
         coutTotal: tarifCalc?.coutTotal ?? 0,
+      },
+      // Assurance Ad Valorem (optionnelle).
+      // Le serveur recalcule le montant à partir de valeur × taux/100,
+      // mais on l'envoie quand même pour traçabilité (historique).
+      assurance: {
+        enabled: Boolean(assuranceEnabled),
+        valeur: assuranceEnabled ? Number(valeurMarchandise) || 0 : 0,
+        taux: assuranceEnabled ? Number(tauxAssurance) || 0 : 0,
+        montant: tarifCalc?.assuranceMontant ?? 0,
       },
     });
   };
@@ -790,6 +837,12 @@ export default function DemandePalette() {
           onPrixHTChange={setPrixHTFromInput}
           onPrixTTCChange={setPrixTTCFromInput}
           onMargeChange={setMargeFromInput}
+          assuranceEnabled={assuranceEnabled}
+          onAssuranceEnabledChange={setAssuranceEnabled}
+          valeurMarchandise={valeurMarchandise}
+          onValeurMarchandiseChange={setValeurMarchandise}
+          tauxAssurance={tauxAssurance}
+          onTauxAssuranceChange={setTauxAssurance}
         />
       </aside>
       </div>
@@ -912,6 +965,12 @@ function TarifSidebar({
   onPrixHTChange,
   onPrixTTCChange,
   onMargeChange,
+  assuranceEnabled,
+  onAssuranceEnabledChange,
+  valeurMarchandise,
+  onValeurMarchandiseChange,
+  tauxAssurance,
+  onTauxAssuranceChange,
 }) {
   const loading = calc.status === "loading";
   const pending = calc.status === "pending-dest";
@@ -954,6 +1013,63 @@ function TarifSidebar({
           />
           <span>Gerbable</span>
         </label>
+      </div>
+
+      {/* ============ Bloc ASSURANCE Ad Valorem (optionnel) ============ */}
+      <div className="dp__calc-block dp__calc-assur">
+        <label className="dp__calc-assur-toggle">
+          <input
+            type="checkbox"
+            checked={Boolean(assuranceEnabled)}
+            onChange={(e) => onAssuranceEnabledChange(e.target.checked)}
+          />
+          <span>Assurance Ad Valorem</span>
+        </label>
+        {assuranceEnabled && (
+          <div className="dp__calc-assur-grid">
+            <div className="dp__pcf">
+              <label htmlFor="dp-assur-valeur" className="dp__pcf-label">
+                Valeur marchandise
+              </label>
+              <div className="dp__pcf-inputwrap">
+                <input
+                  id="dp-assur-valeur"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  className="dp__pcf-input"
+                  value={valeurMarchandise}
+                  onChange={(e) => onValeurMarchandiseChange(e.target.value)}
+                  onFocus={(e) => e.target.select()}
+                  placeholder="0,00"
+                />
+                <span className="dp__pcf-suffix">€</span>
+              </div>
+            </div>
+            <div className="dp__pcf">
+              <label htmlFor="dp-assur-taux" className="dp__pcf-label">
+                Taux
+              </label>
+              <div className="dp__pcf-inputwrap">
+                <input
+                  id="dp-assur-taux"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  className="dp__pcf-input"
+                  value={tauxAssurance}
+                  onChange={(e) => onTauxAssuranceChange(e.target.value)}
+                  onFocus={(e) => e.target.select()}
+                />
+                <span className="dp__pcf-suffix">%</span>
+              </div>
+            </div>
+            <ReadonlyMoney
+              label="Montant assurance"
+              value={calc.assuranceMontant}
+            />
+          </div>
+        )}
       </div>
 
       {/* ============ Bloc PRIX (Prix HT/TTC éditables ; Prix total HT/TTC en lecture seule, pilotés par margeTotal) ============ */}

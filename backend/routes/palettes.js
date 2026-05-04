@@ -351,6 +351,31 @@ function sanitizeTarif(src = {}) {
 }
 
 // ============================================================
+//  Assurance Ad Valorem (optionnelle)
+// ============================================================
+// Schéma : { enabled, valeur, taux, montant }
+//   - enabled : booléen (case cochée côté UI)
+//   - valeur  : valeur déclarée de la marchandise (€)
+//   - taux    : taux d'assurance (%) — défaut UI à 2,00
+//   - montant : montant calculé (recalculé ici à partir de valeur × taux/100
+//               pour ne pas faire confiance aveuglément au front)
+function sanitizeAssurance(src = {}) {
+  const numNonNeg = (v) => {
+    if (v === null || v === undefined || v === "") return 0;
+    const n = Number(v);
+    return Number.isFinite(n) && n >= 0 ? n : 0;
+  };
+  const enabled = Boolean(src?.enabled);
+  const valeur = numNonNeg(src?.valeur);
+  const taux = numNonNeg(src?.taux);
+  // Recalcul autoritaire côté serveur, arrondi 2 décimales.
+  const montant = enabled
+    ? Math.round((valeur * taux) / 100 * 100) / 100
+    : 0;
+  return { enabled, valeur, taux, montant };
+}
+
+// ============================================================
 //  Destinations sauvegardées (carnet par client)
 // ============================================================
 function sanitizeDestination(d = {}) {
@@ -470,6 +495,7 @@ function sanitizeDemande(body = {}) {
       gerbable: Boolean(p?.gerbable),
     })),
     tarif: sanitizeTarif(body?.tarif),
+    assurance: sanitizeAssurance(body?.assurance),
   };
 }
 

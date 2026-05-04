@@ -794,6 +794,46 @@
 }
 
 /* =========================
+   Bloc Assurance Ad Valorem (optionnel)
+========================= */
+.dp__calc-assur {
+  padding: 10px;
+  background: var(--dp-bg-soft);
+  border: 1px solid var(--dp-line);
+  border-radius: 10px;
+}
+
+.dp__calc-assur-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+  user-select: none;
+}
+
+.dp__calc-assur-toggle input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--dp-red);
+}
+
+.dp__calc-assur-grid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 12px;
+}
+
+/* Le "Montant assurance" prend toute la largeur sous les 2 inputs. */
+.dp__calc-assur-grid > .dp__pcf--ro {
+  grid-column: 1 / -1;
+}
+
+/* =========================
    Grilles prix / coûts (2 colonnes)
 ========================= */
 .dp__calc-pricegrid,
