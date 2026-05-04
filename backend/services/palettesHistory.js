@@ -1,8 +1,10 @@
 /**
  * Service d'historique des demandes Palette.
  *
- * Stockage : un unique fichier JSON `backend/data/palettes-history.json`
- * contenant un tableau d'entrées triées par date (les plus récentes en tête).
+ * Deux backends interchangeables (var. d'env. STORAGE) :
+ *
+ *   STORAGE=json       (par défaut)  → backend/data/palettes-history.json
+ *   STORAGE=firestore                → collection `palettes_history`
  *
  * Schéma d'une entrée :
  *   {
@@ -17,12 +19,14 @@
  *     payload: { ... payload complet envoyé au script Python ... }
  *   }
  *
- * On garde au plus MAX_ENTRIES entrées (rotation des plus anciennes).
+ * Rotation : on conserve au plus MAX_ENTRIES entrées.
  */
 import { mkdir, readFile, writeFile, access } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
+
+import { getFirestore, isFirestoreStorage } from "./firestore.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,8 +34,12 @@ const BACKEND_ROOT = path.resolve(__dirname, "..");
 const DATA_DIR = path.join(BACKEND_ROOT, "data");
 const HISTORY_FILE = path.join(DATA_DIR, "palettes-history.json");
 
+const COLLECTION = "palettes_history";
 const MAX_ENTRIES = 500;
 
+// ============================================================
+//  Backend JSON
+// ============================================================
 async function ensureFile() {
   try {
     await access(HISTORY_FILE);
@@ -41,7 +49,7 @@ async function ensureFile() {
   }
 }
 
-async function loadAll() {
+async function loadAllJson() {
   await ensureFile();
   const raw = await readFile(HISTORY_FILE, "utf-8");
   try {
@@ -52,11 +60,73 @@ async function loadAll() {
   }
 }
 
-async function saveAll(entries) {
+async function saveAllJson(entries) {
   await mkdir(DATA_DIR, { recursive: true });
   await writeFile(HISTORY_FILE, JSON.stringify(entries, null, 2), "utf-8");
 }
 
+// ============================================================
+//  Backend Firestore
+// ============================================================
+async function appendFirestore(entry) {
+  const db = await getFirestore();
+  await db.collection(COLLECTION).doc(entry.id).set(entry);
+
+  // Rotation best-effort : supprime les entrées au-delà de MAX_ENTRIES.
+  // Une erreur ici ne doit pas remonter (l'écriture principale est OK).
+  try {
+    const overflow = await db
+      .collection(COLLECTION)
+      .orderBy("createdAt", "desc")
+      .offset(MAX_ENTRIES)
+      .get();
+    if (!overflow.empty) {
+      const batch = db.batch();
+      overflow.docs.forEach((d) => batch.delete(d.ref));
+      await batch.commit();
+    }
+  } catch (e) {
+    console.warn(
+      "Rotation historique Firestore échouée (non bloquant) :",
+      e?.message || e,
+    );
+  }
+}
+
+async function listFirestore({ summary }) {
+  const db = await getFirestore();
+  const snap = await db
+    .collection(COLLECTION)
+    .orderBy("createdAt", "desc")
+    .get();
+  if (summary) {
+    return snap.docs.map((d) => {
+      // eslint-disable-next-line no-unused-vars
+      const { payload, ...rest } = d.data();
+      return rest;
+    });
+  }
+  return snap.docs.map((d) => d.data());
+}
+
+async function getFirestoreById(id) {
+  const db = await getFirestore();
+  const doc = await db.collection(COLLECTION).doc(id).get();
+  return doc.exists ? doc.data() : null;
+}
+
+async function deleteFirestore(id) {
+  const db = await getFirestore();
+  const ref = db.collection(COLLECTION).doc(id);
+  const doc = await ref.get();
+  if (!doc.exists) return false;
+  await ref.delete();
+  return true;
+}
+
+// ============================================================
+//  Construction d'une entrée (logique pure, indépendante du backend)
+// ============================================================
 /**
  * Construit une entrée d'historique à partir des données de génération.
  * Le payload est conservé tel-quel (pour permettre la regénération à l'identique).
@@ -95,19 +165,26 @@ export function buildHistoryEntry({
   };
 }
 
+// ============================================================
+//  API publique — dispatch sur le backend
+// ============================================================
+
 /**
  * Ajoute une entrée à l'historique. Best-effort : retourne null si
  * l'écriture échoue, sans propager l'erreur (la génération reste prioritaire).
- * En cas de succès, retourne l'entrée enregistrée (avec son id).
  */
 export async function appendHistory(entry) {
   try {
-    const entries = await loadAll();
+    if (isFirestoreStorage()) {
+      await appendFirestore(entry);
+      return entry;
+    }
+    const entries = await loadAllJson();
     entries.unshift(entry);
     if (entries.length > MAX_ENTRIES) {
       entries.length = MAX_ENTRIES;
     }
-    await saveAll(entries);
+    await saveAllJson(entries);
     return entry;
   } catch (e) {
     console.warn("appendHistory échoué (non bloquant):", e?.message || e);
@@ -120,21 +197,25 @@ export async function appendHistory(entry) {
  * la taille de la réponse (utile pour la liste affichée dans l'UI).
  */
 export async function listEntries({ summary = true } = {}) {
-  const entries = await loadAll();
+  if (isFirestoreStorage()) return listFirestore({ summary });
+  const entries = await loadAllJson();
   if (!summary) return entries;
-  return entries.map(({ payload, ...rest }) => rest); // eslint-disable-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
+  return entries.map(({ payload, ...rest }) => rest);
 }
 
 export async function getEntryById(id) {
-  const entries = await loadAll();
+  if (isFirestoreStorage()) return getFirestoreById(id);
+  const entries = await loadAllJson();
   return entries.find((e) => e.id === id) || null;
 }
 
 export async function deleteEntry(id) {
-  const entries = await loadAll();
+  if (isFirestoreStorage()) return deleteFirestore(id);
+  const entries = await loadAllJson();
   const idx = entries.findIndex((e) => e.id === id);
   if (idx === -1) return false;
   entries.splice(idx, 1);
-  await saveAll(entries);
+  await saveAllJson(entries);
   return true;
 }

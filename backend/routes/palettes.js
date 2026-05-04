@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
-import { mkdir, readFile, writeFile, unlink, access } from "node:fs/promises";
+import { mkdir, readFile, writeFile, unlink } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { loadClients, saveClients } from "../services/clientsRepo.js";
 import {
   appendHistory,
   buildHistoryEntry,
@@ -22,7 +23,6 @@ const TEMPLATES_DIR = path.join(DATA_DIR, "templates");
 const TMP_DIR = path.join(DATA_DIR, "tmp");
 const SCRIPTS_DIR = path.join(BACKEND_ROOT, "scripts");
 
-const CLIENTS_FILE = path.join(DATA_DIR, "clients.json");
 const RATES_FILE = path.join(DATA_DIR, "dhl_palette_rates.json");
 const TEMPLATE_PATH = path.join(TEMPLATES_DIR, "dhl_freight_palette_template.xlsx");
 const FILL_SCRIPT = path.join(SCRIPTS_DIR, "fill_dhl_palette.py");
@@ -31,34 +31,6 @@ const PYTHON_BIN = process.env.PYTHON_BIN || "python3";
 const MAX_PALETTES = 5;
 
 const router = Router();
-
-// ============================================================
-//  Helpers stockage clients (JSON sur disque)
-// ============================================================
-async function ensureClientsFile() {
-  try {
-    await access(CLIENTS_FILE);
-  } catch {
-    await mkdir(DATA_DIR, { recursive: true });
-    await writeFile(CLIENTS_FILE, "[]", "utf-8");
-  }
-}
-
-async function loadClients() {
-  await ensureClientsFile();
-  const raw = await readFile(CLIENTS_FILE, "utf-8");
-  try {
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
-
-async function saveClients(clients) {
-  await mkdir(DATA_DIR, { recursive: true });
-  await writeFile(CLIENTS_FILE, JSON.stringify(clients, null, 2), "utf-8");
-}
 
 // ============================================================
 //  Validation
