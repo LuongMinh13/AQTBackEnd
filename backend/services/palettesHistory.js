@@ -70,7 +70,11 @@ async function saveAllJson(entries) {
 // ============================================================
 async function appendFirestore(entry) {
   const db = await getFirestore();
-  await db.collection(COLLECTION).doc(entry.id).set(entry);
+  // L'id sert de clé du document : on évite de le répéter dans le payload
+  // pour rester cohérent avec ce que produit le script de migration.
+  // eslint-disable-next-line no-unused-vars
+  const { id, ...data } = entry;
+  await db.collection(COLLECTION).doc(entry.id).set(data);
 
   // Rotation best-effort : supprime les entrées au-delà de MAX_ENTRIES.
   // Une erreur ici ne doit pas remonter (l'écriture principale est OK).
@@ -103,16 +107,17 @@ async function listFirestore({ summary }) {
     return snap.docs.map((d) => {
       // eslint-disable-next-line no-unused-vars
       const { payload, ...rest } = d.data();
-      return rest;
+      return { id: d.id, ...rest };
     });
   }
-  return snap.docs.map((d) => d.data());
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
 
 async function getFirestoreById(id) {
   const db = await getFirestore();
   const doc = await db.collection(COLLECTION).doc(id).get();
-  return doc.exists ? doc.data() : null;
+  if (!doc.exists) return null;
+  return { id: doc.id, ...doc.data() };
 }
 
 async function deleteFirestore(id) {
