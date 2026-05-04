@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import upsRouter from "./routes/ups.js";
 import invoicesRouter from "./routes/invoices.js";
+import palettesRouter from "./routes/palettes.js";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(express.json({ limit: "10mb" }));
 // API
 app.use("/api/ups", upsRouter);
 app.use("/api/invoices", invoicesRouter);
+app.use("/api/palettes", palettesRouter);
 
 // En production : servir le build du frontend + fallback SPA
 if (process.env.NODE_ENV === "production") {

@@ -1,5 +1,7 @@
 /* =========================
    Navbar
+   Toutes les couleurs viennent de themes.css
+   (voir src/assets/Style/themes.css).
 ========================= */
 
 .navbar {
@@ -7,8 +9,14 @@
   top: 0;
   z-index: 50;
   width: 100%;
-  background: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  /* Bande décorative : transparente en Light/Dark,
+     arc-en-ciel en Pride, tricolore STI en Subaru */
+  background-image: var(--accent-gradient);
+  background-repeat: no-repeat;
+  background-size: 100% 3px;
+  background-position: top left;
 }
 
 .navbar__inner {
@@ -25,7 +33,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #0f172a;
+  color: var(--color-text);
   font-weight: 700;
 }
 
@@ -35,8 +43,8 @@
   justify-content: center;
   width: 34px;
   height: 34px;
-  background: #0f172a;
-  color: #ffffff;
+  background: var(--color-brand-bg);
+  color: var(--color-brand-text);
   border-radius: 8px;
 }
 
@@ -62,7 +70,7 @@
   padding: 8px 12px;
   font-size: 14px;
   font-weight: 500;
-  color: #334155;
+  color: var(--color-text-muted);
   border-radius: 8px;
   background: transparent;
   border: none;
@@ -71,13 +79,13 @@
 }
 
 .navbar__link:hover {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--color-hover);
+  color: var(--color-text);
 }
 
 .navbar__link.is-active {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--color-hover);
+  color: var(--color-text);
 }
 
 /* Dropdown */
@@ -90,8 +98,8 @@
 }
 
 .navbar__dropdown-btn.is-open {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--color-hover);
+  color: var(--color-text);
 }
 
 .navbar__dropdown-btn.is-open .navbar__caret {
@@ -103,11 +111,10 @@
   top: calc(100% + 6px);
   left: 0;
   min-width: 200px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 10px;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1),
-              0 4px 6px -2px rgba(15, 23, 42, 0.05);
+  box-shadow: var(--shadow-lg);
   padding: 6px;
   list-style: none;
   margin: 0;
@@ -118,20 +125,28 @@
   display: block;
   padding: 8px 12px;
   font-size: 14px;
-  color: #334155;
+  color: var(--color-text-muted);
   border-radius: 6px;
   transition: background-color 0.12s ease, color 0.12s ease;
 }
 
 .navbar__menu-item:hover {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--color-hover);
+  color: var(--color-text);
 }
 
 .navbar__menu-item.active {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--color-hover);
+  color: var(--color-text);
   font-weight: 600;
+}
+
+/* Zone actions à droite (ThemeSwitcher, etc.) */
+.navbar__actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* Responsive basique */
@@ -148,5 +163,9 @@
 
   .navbar__link {
     white-space: nowrap;
+  }
+
+  .navbar__actions {
+    margin-left: 0;
   }
 }

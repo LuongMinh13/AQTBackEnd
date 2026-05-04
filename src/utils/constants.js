@@ -58,6 +58,24 @@ export const PICKUP_CARRIERS = [
 export const getCarrierByslug = (list, slug) =>
   list.find((c) => c.slug === slug);
 
+// Sous-sections du module Palettes (menu déroulant Navbar + page index)
+export const PALETTE_SECTIONS = [
+  {
+    slug: "demande",
+    name: "Demande de tarifs",
+    label: "Nouvelle demande",
+    description:
+      "Remplir automatiquement le formulaire DHL Freight à partir d'un expéditeur et des palettes.",
+  },
+  {
+    slug: "historique",
+    name: "Historique",
+    label: "Historique des demandes",
+    description:
+      "Consulter, re-télécharger ou dupliquer les demandes de palettes générées.",
+  },
+];
+
 // Routes principales
 export const ROUTES = {
   dashboard: "/",
@@ -66,5 +84,7 @@ export const ROUTES = {
   pickups: "/pickups",
   pickup: (slug) => `/pickups/${slug}`,
   palettes: "/palettes",
+  palette: (slug) => `/palettes/${slug}`,
+  clients: "/clients",
   connection: "/connection",
 };

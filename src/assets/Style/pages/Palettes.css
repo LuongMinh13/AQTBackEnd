@@ -1,5 +1,6 @@
 /* =========================
    Palettes Page
+   Couleurs via themes.css
 ========================= */
 
 .palettes-page {
@@ -19,13 +20,13 @@
   margin: 0;
   font-size: clamp(26px, 2.6vw, 36px);
   font-weight: 800;
-  color: #0f172a;
+  color: var(--color-text);
   letter-spacing: -0.02em;
 }
 
 .palettes-page__subtitle {
   margin: 0;
-  color: #64748b;
+  color: var(--color-text-muted);
   font-size: 15px;
 }
 
@@ -34,13 +35,13 @@
   display: flex;
   gap: 12px;
   padding: 16px 18px;
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
+  background: var(--color-primary-soft);
+  border: 1px solid var(--color-primary);
   border-radius: 12px;
 }
 
 .palettes-page__info-icon {
-  color: #2563eb;
+  color: var(--color-primary);
   flex-shrink: 0;
   padding-top: 2px;
 }
@@ -49,13 +50,13 @@
   margin: 0 0 4px 0;
   font-size: 14px;
   font-weight: 600;
-  color: #1e40af;
+  color: var(--color-primary);
 }
 
 .palettes-page__info-desc {
   margin: 0;
   font-size: 14px;
-  color: #1e40af;
+  color: var(--color-primary);
   line-height: 1.5;
 }
 
@@ -65,10 +66,10 @@
   flex-direction: column;
   gap: 16px;
   padding: 22px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 14px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  box-shadow: var(--shadow-sm);
 }
 
 .palettes-page__section-head {
@@ -81,13 +82,13 @@
   margin: 0;
   font-size: 18px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text);
 }
 
 .palettes-page__section-desc {
   margin: 0;
   font-size: 14px;
-  color: #64748b;
+  color: var(--color-text-muted);
 }
 
 .palettes-page__process-btn {
@@ -96,18 +97,60 @@
   font-size: 15px;
   font-weight: 600;
   color: #ffffff;
-  background: #16a34a;
+  background: var(--color-success);
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: filter 0.15s ease;
 }
 
 .palettes-page__process-btn:hover:not(:disabled) {
-  background: #15803d;
+  filter: brightness(0.92);
 }
 
 .palettes-page__process-btn:disabled {
-  background: #94a3b8;
+  background: var(--color-text-subtle);
   cursor: not-allowed;
+}
+
+/* Index — cartes de sous-sections */
+.palettes-index {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.palettes-index__card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 22px;
+  text-align: left;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease,
+    box-shadow 0.15s ease;
+  font: inherit;
+  color: inherit;
+}
+
+.palettes-index__card:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.palettes-index__card-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.palettes-index__card-desc {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
 }

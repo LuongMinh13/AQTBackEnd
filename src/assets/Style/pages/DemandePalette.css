@@ -1,0 +1,956 @@
+/* =========================
+   Page Demande Palette — style MBEhub
+   - barre de recherche client en haut
+   - 3 modules collapsibles (Client / Expéditeur / Destinataire)
+   - inputs soulignés type Material, soulignement orange si requis vide
+========================= */
+
+.dp {
+  --dp-red: #c8102e;             /* accent type MBE */
+  --dp-red-soft: #f6e2e6;
+  --dp-orange: #ff7a59;          /* "Ce champ est obligatoire !" */
+  --dp-line: #d6dadf;
+  --dp-line-strong: #1f2a36;
+  --dp-bg-soft: #f7f8fa;
+
+  padding-block: 4px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dp__header { display: flex; flex-direction: column; gap: 4px; }
+.dp__title {
+  margin: 0;
+  font-size: clamp(22px, 2.2vw, 30px);
+  font-weight: 800;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+}
+.dp__subtitle {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.dp__form { display: flex; flex-direction: column; gap: 8px; }
+
+/* =========================
+   Barre de recherche CLIENT
+========================= */
+.dp__searchbar {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 12px 10px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
+.dp__searchbar-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-text);
+  text-transform: uppercase;
+}
+
+.dp__searchbar-wrap {
+  position: relative;
+}
+
+.dp__searchbar-input {
+  width: 100%;
+  padding: 8px 36px 8px 14px;
+  font-size: 14px;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: 999px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.dp__searchbar-input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.4;
+}
+.dp__searchbar-input:focus {
+  outline: none;
+  border-color: var(--dp-red);
+  box-shadow: 0 0 0 3px var(--dp-red-soft);
+}
+.dp__searchbar-input--invalid {
+  border-color: var(--dp-orange);
+}
+
+.dp__searchbar-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+.dp__searchbar-clear:hover {
+  background: var(--color-hover);
+  color: var(--dp-red);
+  border-color: var(--dp-red);
+}
+
+/* Suggestions (autocomplete) */
+.dp__suggest {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 280px;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-lg);
+  z-index: 50;
+}
+.dp__suggest-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 8px 12px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  color: var(--color-text);
+  transition: background-color 0.12s ease;
+}
+.dp__suggest-item:hover { background: var(--color-hover); }
+.dp__suggest-societe { font-size: 14px; font-weight: 600; }
+.dp__suggest-adresse {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+/* =========================
+   Section collapsible
+========================= */
+.dp__section {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  /* overflow visible : permet aux dropdowns (Pays, suggestions) de déborder */
+  overflow: visible;
+  position: relative;
+}
+
+.dp__section-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 14px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: var(--color-text);
+  border-radius: 12px 12px 0 0;
+}
+/* Quand la section est repliée, l'en-tête arrondit aussi en bas */
+.dp__section:not(:has(> .dp__section-body)) .dp__section-head {
+  border-radius: 12px;
+}
+.dp__section-head:hover { background: var(--dp-bg-soft); }
+
+.dp__section-title {
+  font-weight: 700;
+  font-size: 15px;
+  white-space: nowrap;
+  color: var(--color-text);
+}
+
+.dp__section-summary {
+  font-size: 14px;
+  color: var(--color-text);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.dp__section-spacer { flex: 1 1 auto; }
+
+.dp__section-headerRight { display: inline-flex; align-items: center; }
+
+.dp__chev {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  transform: rotate(0deg);
+  transition: transform 0.18s ease;
+}
+.dp__chev--open { transform: rotate(180deg); }
+
+.dp__section-body {
+  padding: 2px 14px 10px;
+  border-top: 1px solid var(--color-border);
+  border-radius: 0 0 12px 12px;
+}
+
+.dp__empty {
+  margin: 8px 0 2px;
+  padding: 8px 12px;
+  color: var(--color-text-muted);
+  background: var(--dp-bg-soft);
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+/* =========================
+   Grille d'inputs Material-like
+========================= */
+.dp__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 6px 18px;
+  padding-top: 8px;
+}
+
+/* Tailles par défaut sur 6 colonnes (2 par ligne) */
+.dp__ufield { grid-column: span 6; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.dp__ufield--small { grid-column: span 3; }
+.dp__ufield--wide { grid-column: span 6; }
+.dp__ufield--full { grid-column: span 12; }
+.dp__ufield--m4 { grid-column: span 4; }
+.dp__ufield--m5 { grid-column: span 5; }
+.dp__ufield--m9 { grid-column: span 9; }
+
+/* Bandeau d'actions à droite de Société (loupe / profil / gomme) */
+.dp__row-actions {
+  grid-column: span 3;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 6px;
+  padding-bottom: 4px;
+}
+.dp__row-actions--placeholder { visibility: hidden; }
+
+.dp__icon-btn {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface);
+  /* Plus sombre pour une meilleure lisibilité */
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.12s ease,
+    background-color 0.12s ease,
+    border-color 0.12s ease;
+}
+.dp__icon-btn svg { stroke-width: 2.2; }
+.dp__icon-btn:hover:not(:disabled) {
+  background: var(--dp-red-soft);
+  color: var(--dp-red);
+  border-color: var(--dp-red);
+}
+.dp__icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 820px) {
+  .dp__ufield,
+  .dp__ufield--small,
+  .dp__ufield--wide,
+  .dp__ufield--full,
+  .dp__ufield--m4,
+  .dp__ufield--m5,
+  .dp__ufield--m9 { grid-column: span 12; }
+  .dp__row-actions { grid-column: span 12; justify-content: flex-start; }
+}
+
+.dp__ulabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
+  margin-bottom: 0;
+}
+
+.dp__req {
+  color: var(--dp-orange);
+  margin-left: 3px;
+}
+
+.dp__uinput {
+  width: 100%;
+  padding: 3px 2px 5px;
+  font: inherit;
+  font-size: 15px;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  /* Soulignement gris (au lieu du noir précédent) */
+  border-bottom: 1.5px solid var(--dp-line);
+  border-radius: 0;
+  transition: border-color 0.15s ease;
+}
+.dp__uinput:focus {
+  outline: none;
+  border-bottom-color: var(--dp-red);
+}
+/* Placeholders plus discrets */
+.dp__uinput::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.4;
+}
+
+/* État : champ vide requis (avant submit) — soulignement orange discret + label orange */
+.dp__ufield--required .dp__ulabel { color: var(--dp-orange); }
+.dp__ufield--required .dp__uinput { border-bottom-color: var(--dp-orange); }
+
+/* État : erreur affichée (après tentative submit) — orange + message */
+.dp__ufield--error .dp__ulabel { color: var(--dp-orange); }
+.dp__ufield--error .dp__uinput { border-bottom-color: var(--dp-orange); }
+
+/* État : verrouillé (Client) */
+.dp__ufield--locked .dp__uinput {
+  color: var(--color-text);
+  cursor: not-allowed;
+  background: transparent;
+  border-bottom-style: dashed;
+  border-bottom-color: var(--dp-line);
+}
+.dp__ufield--locked .dp__ulabel { color: var(--color-text-muted); }
+
+.dp__inline-err {
+  font-size: 11px;
+  color: var(--dp-orange);
+  margin-top: 1px;
+  line-height: 1.1;
+}
+
+/* Combobox / popup villes */
+.dp__combobox { position: relative; }
+
+.dp__cp-loading {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.dp__suggest--inline {
+  top: calc(100% + 2px);
+  max-height: 220px;
+}
+
+.dp__suggest-empty {
+  padding: 10px 12px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+/* =========================
+   Pill (combobox Pays)
+========================= */
+.dp__pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--color-border);
+  border-radius: 999px;
+  padding: 4px 4px 4px 14px;
+  background: var(--color-surface);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.dp__pill:focus-within {
+  border-color: var(--dp-red);
+  box-shadow: 0 0 0 3px var(--dp-red-soft);
+}
+.dp__ufield--locked .dp__pill {
+  border-style: dashed;
+  background: transparent;
+}
+
+.dp__pill-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  color: var(--color-text);
+  padding: 4px 0;
+  min-width: 0;
+}
+.dp__pill-input:focus { outline: none; }
+.dp__pill-input::placeholder { color: var(--color-text-muted); opacity: 0.4; }
+
+.dp__pill-chev {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--color-text-muted);
+}
+.dp__pill-chev:hover { background: var(--dp-bg-soft); }
+
+.dp__suggest--pill {
+  top: calc(100% + 4px);
+  border-radius: 8px;
+  max-height: 280px;
+  z-index: 120;
+}
+
+/* Le champ Pays passe au-dessus des sections voisines quand il est ouvert */
+.dp__ufield:focus-within { position: relative; z-index: 110; }
+
+/* =========================
+   Modale "Validation de la ville"
+========================= */
+.dp__modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 22, 36, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 24px;
+}
+
+.dp__modal {
+  position: relative;
+  background: var(--color-surface);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  width: min(900px, 95vw);
+  max-height: min(80vh, 700px);
+  display: flex;
+  flex-direction: column;
+  padding: 28px 28px 16px;
+}
+
+.dp__modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  font-size: 22px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  line-height: 1;
+}
+.dp__modal-close:hover { background: var(--dp-bg-soft); color: var(--color-text); }
+
+.dp__modal-title {
+  margin: 0 0 10px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.dp__modal-disclaimer {
+  margin: 0 auto 14px;
+  max-width: 620px;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.dp__modal-meta {
+  text-align: right;
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-bottom: 6px;
+}
+
+.dp__modal-table-wrap {
+  overflow-y: auto;
+  flex: 1 1 auto;
+  border-top: 1px solid var(--color-border);
+}
+
+.dp__modal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.dp__modal-table th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  background: var(--color-surface);
+  z-index: 1;
+}
+.dp__modal-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+.dp__modal-table tbody tr {
+  cursor: pointer;
+  transition: background-color 0.1s ease, box-shadow 0.1s ease;
+}
+.dp__modal-table tbody tr:hover,
+.dp__modal-table tbody tr.dp__row--selected {
+  background: var(--dp-bg-soft);
+  box-shadow: inset 0 0 0 2px #c6e870;
+}
+
+.dp__th-right { text-align: right; }
+
+
+/* =========================
+   Palettes (mode compact sur une seule ligne)
+========================= */
+.dp__palettes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 4px;
+}
+.dp__palettes--compact { gap: 6px; }
+
+.dp__palette-row {
+  display: grid;
+  grid-template-columns: 36px 1fr 1.6fr;
+  align-items: end;
+  gap: 12px;
+  padding: 6px 10px;
+  background: var(--dp-bg-soft);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+.dp__palette-row--inline { padding: 4px 10px; }
+/* Réduit la hauteur des champs dans la ligne palette (plus compact) */
+/* IMPORTANT : on neutralise le `grid-column: span 6` hérité du grid global,
+   pour que Poids et Dimensions restent sur UNE SEULE ligne */
+.dp__palette-row--inline .dp__ufield,
+.dp__palette-row--inline .dp__ufield--small,
+.dp__palette-row--inline .dp__ufield--wide,
+.dp__palette-row--inline .dp__ufield--full,
+.dp__palette-row--inline .dp__ufield--m4,
+.dp__palette-row--inline .dp__ufield--m5,
+.dp__palette-row--inline .dp__ufield--m9 {
+  grid-column: auto;
+  gap: 0;
+  min-width: 0;
+}
+.dp__palette-row--inline .dp__uinput {
+  padding-block: 4px;
+  font-size: 13px;
+}
+.dp__palette-row--inline .dp__ulabel {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+.dp__palette-row--inline .dp__inline-err { display: none; }
+
+.dp__palette-idx {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  padding-bottom: 6px;
+  white-space: nowrap;
+}
+
+/* Checkbox "Palettes identiques" dans l'en-tête du module Palettes */
+.dp__palette-identique {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text);
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--dp-line);
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.dp__palette-identique input { width: 15px; height: 15px; cursor: pointer; accent-color: var(--dp-red); }
+
+@media (max-width: 820px) {
+  .dp__palette-row {
+    grid-template-columns: auto 1fr 1fr;
+  }
+}
+
+/* =========================
+   Boutons
+========================= */
+.dp__add-btn {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--dp-red);
+  background: var(--dp-red-soft);
+  border: 1px solid var(--dp-red);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+.dp__add-btn:hover:not(:disabled) { filter: brightness(0.96); }
+.dp__add-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.dp__remove-btn {
+  width: 30px;
+  height: 30px;
+  margin-bottom: 4px;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--dp-red);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.dp__remove-btn:hover:not(:disabled) {
+  background: var(--dp-red);
+  color: #fff;
+  border-color: var(--dp-red);
+}
+.dp__remove-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* =========================
+   Actions / submit
+========================= */
+.dp__actions { display: flex; justify-content: flex-end; }
+
+.dp__submit-btn {
+  padding: 11px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--color-success);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+.dp__submit-btn:hover:not(:disabled) { filter: brightness(0.92); }
+.dp__submit-btn:disabled {
+  background: var(--color-text-subtle);
+  cursor: not-allowed;
+}
+
+.dp__error {
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--color-danger);
+  background: var(--color-danger-soft);
+  border: 1px solid var(--color-danger);
+  border-radius: 8px;
+}
+
+/* =========================
+   Layout 2 colonnes : formulaire (4/5) + sidebar tarif (1/5)
+========================= */
+.dp__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(240px, 1fr);
+  gap: 16px;
+  align-items: flex-start;
+}
+.dp__form--main { min-width: 0; }
+
+.dp__calc {
+  position: sticky;
+  top: 12px;
+  align-self: flex-start;
+}
+
+@media (max-width: 1024px) {
+  .dp__layout {
+    grid-template-columns: 1fr;
+  }
+  .dp__calc { position: static; }
+}
+
+/* =========================
+   Sidebar Calcul tarif
+========================= */
+.dp__calc-card {
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--dp-line);
+  border-radius: 12px;
+  padding: 14px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.dp__calc-head { display: flex; flex-direction: column; gap: 2px; }
+.dp__calc-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+}
+.dp__calc-sub {
+  margin: 0;
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+/* Blocs génériques (label + contenu) */
+.dp__calc-block { display: flex; flex-direction: column; gap: 6px; }
+.dp__calc-block-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+/* Grille boutons palettes */
+.dp__calc-pal-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+}
+.dp__calc-pal-btn {
+  padding: 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--dp-line);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+.dp__calc-pal-btn:hover { background: var(--dp-bg-soft); }
+.dp__calc-pal-btn--sel {
+  color: #fff;
+  background: var(--dp-red);
+  border-color: var(--dp-red);
+}
+.dp__calc-pal-btn--sel:hover { background: var(--dp-red); filter: brightness(0.95); }
+
+/* Checkbox Gerbable globale */
+.dp__calc-gerbable {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  padding: 4px 2px;
+  font-size: 13px;
+  color: var(--color-text);
+  cursor: pointer;
+  user-select: none;
+}
+.dp__calc-gerbable input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--dp-red);
+}
+
+/* =========================
+   Grilles prix / coûts (2 colonnes)
+========================= */
+.dp__calc-pricegrid,
+.dp__calc-costgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 12px;
+}
+
+.dp__calc-pricegrid {
+  padding: 10px;
+  background: linear-gradient(135deg, #fff5f6 0%, #fdecef 100%);
+  border: 1px solid var(--dp-red-soft);
+  border-radius: 10px;
+}
+
+.dp__calc-costgrid {
+  padding: 10px;
+  background: var(--dp-bg-soft);
+  border: 1px solid var(--dp-line);
+  border-radius: 10px;
+}
+
+/* =========================
+   Champ "Price Cell Field" (PCF)
+   label flottant au-dessus + valeur soulignée
+   - justify-content: flex-end pour aligner les valeurs en bas
+     (utile quand un label voisin déborde sur 2 lignes)
+========================= */
+.dp__pcf {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+  min-width: 0;
+}
+.dp__pcf-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  line-height: 1.2;
+}
+
+.dp__pcf-inputwrap {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 4px 0 2px;
+  border-bottom: 1.5px solid var(--dp-line);
+  transition: border-color 0.15s ease;
+}
+.dp__pcf:not(.dp__pcf--ro):not(.dp__pcf--disabled)
+  .dp__pcf-inputwrap:focus-within {
+  border-bottom-color: var(--dp-red);
+}
+.dp__pcf--disabled .dp__pcf-inputwrap {
+  border-bottom-style: dashed;
+  opacity: 0.55;
+}
+
+.dp__pcf-input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  /* Editable = noir (var(--color-text)) */
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  outline: none;
+  text-align: right;
+  letter-spacing: -0.01em;
+}
+.dp__pcf-input:disabled {
+  color: var(--color-text-subtle);
+  -webkit-text-fill-color: var(--color-text-subtle);
+  cursor: not-allowed;
+}
+/* Masque les flèches spin de number input */
+.dp__pcf-input::-webkit-outer-spin-button,
+.dp__pcf-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.dp__pcf-input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.dp__pcf-input--ro {
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  flex: 1;
+  min-width: 0;
+}
+
+.dp__pcf-suffix {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: 0.01em;
+  flex-shrink: 0;
+}
+
+/* Readonly : valeurs en gris (champs fixes) + soulignement pointillé */
+.dp__pcf--ro .dp__pcf-inputwrap {
+  border-bottom-color: var(--dp-line);
+  border-bottom-style: dotted;
+}
+.dp__pcf--ro .dp__pcf-input,
+.dp__pcf--ro .dp__pcf-input--ro {
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+/* Strong : valeur mise en avant (Prix total TTC) — taille augmentée, couleur conservée */
+.dp__pcf--strong .dp__pcf-input,
+.dp__pcf--strong .dp__pcf-input--ro {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.dp__pcf--strong .dp__pcf-suffix {
+  font-size: 13px;
+}
+
+/* Dans le bloc prix (fond rouge pâle), on souligne les éditables en rouge ;
+   les valeurs restent noires (lisibilité demandée). */
+.dp__calc-pricegrid .dp__pcf:not(.dp__pcf--ro) .dp__pcf-inputwrap {
+  border-bottom-color: var(--dp-red);
+}
+
+/* Messages */
+.dp__calc-msg {
+  padding: 8px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  line-height: 1.35;
+}
+.dp__calc-msg--err {
+  color: var(--color-danger);
+  background: var(--color-danger-soft);
+  border: 1px solid var(--color-danger);
+}
+.dp__calc-msg--info {
+  color: var(--color-text-muted);
+  background: var(--dp-bg-soft);
+  border: 1px solid var(--dp-line);
+}
+.dp__calc-msg--hint {
+  color: var(--color-text-subtle);
+  font-size: 11px;
+  font-style: italic;
+}

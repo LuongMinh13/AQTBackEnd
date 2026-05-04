@@ -1,92 +1,21 @@
-import re
 import csv
 import sys
-from datetime import datetime
 from pathlib import Path
 import pdfplumber
 
-# ----------------------------
-# Mois FR -> MM
-# ----------------------------
-MONTHS = {
-    "Jan": "01",
-    "Fév": "02",
-    "Fev": "02",
-    "Mar": "03",
-    "Avr": "04",
-    "Mai": "05",
-    "Juin": "06",
-    "Juil": "07",
-    "Aoû": "08",
-    "Aou": "08",
-    "Sep": "09",
-    "Oct": "10",
-    "Nov": "11",
-    "Déc": "12",
-    "Dec": "12",
-}
-
-# ----------------------------
-# Regex
-# ----------------------------
-TRACK_RE = re.compile(r"\b1Z[0-9A-Z]{16}\b")
-MONEY_RE = re.compile(r"\b\d{1,3}(?:[ \xa0]\d{3})*,\d{2}\b")
-DATE_RE = re.compile(
-    r"(?P<d>\d{1,2})\s*(?P<m>Jan|Fév|Fev|Mar|Avr|Mai|Juin|Juil|Aoû|Aou|Sep|Oct|Nov|Déc|Dec)\b",
-    re.IGNORECASE,
+# Helpers partagés (regex, MONTHS, formatage FR, parsing année/page)
+from _ups_common import (
+    MONTHS,
+    TRACK_RE,
+    MONEY_RE,
+    DATE_RE,
+    default_year,
+    parse_year_from_page,
+    fr_money_to_float,
+    float_to_fr_money,
+    normalize_date_fr,
+    normalize_line,
 )
-
-
-def default_year() -> str:
-    """Année par défaut : année courante (fallback si non-détectée dans le PDF)."""
-    return str(datetime.now().year)
-
-
-def parse_year_from_page(text: str, default: str = None) -> str:
-    """Cherche 'Date facture X Mois YYYY' dans le texte. Sinon fallback."""
-    if default is None:
-        default = default_year()
-    m = re.search(r"Date facture\s+\d{1,2}\s+[A-Za-zéûôîÉÛÔÎ]+\s+(\d{4})", text or "")
-    return m.group(1) if m else default
-
-
-# ----------------------------
-# Helpers format FR
-# ----------------------------
-def fr_money_to_float(s: str):
-    if not s:
-        return None
-    s = s.replace("\xa0", " ").strip()
-    s = s.replace(" ", "")
-    s = s.replace(",", ".")
-    try:
-        return float(s)
-    except Exception:
-        return None
-
-
-def float_to_fr_money(x):
-    if x is None or x == "":
-        return ""
-    try:
-        return f"{float(x):.2f}".replace(".", ",")
-    except Exception:
-        return ""
-
-
-def normalize_date_fr(day: str, mon: str, year: str):
-    mon_clean = mon.capitalize()[:3]
-    mon_num = MONTHS.get(mon_clean)
-    if not mon_num:
-        return None
-    dd = f"{int(day):02d}"
-    return f"{dd}/{mon_num}/{year}"
-
-
-def normalize_line(s: str) -> str:
-    s = s.replace("\xa0", " ")
-    s = s.replace("’", "'")
-    return " ".join(s.split())
 
 
 def find_date_near_block(block_lines, year: str):

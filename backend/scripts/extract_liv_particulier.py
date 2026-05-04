@@ -2,19 +2,21 @@
 import re
 import csv
 import sys
-from datetime import datetime
 from pathlib import Path
 import pdfplumber
 
-MONTHS = {
-    "Jan": "01", "Fév": "02", "Fev": "02", "Mar": "03", "Avr": "04", "Mai": "05", "Juin": "06",
-    "Juil": "07", "Aoû": "08", "Aou": "08", "Sep": "09", "Oct": "10", "Nov": "11", "Déc": "12", "Dec": "12"
-}
+# Helpers partagés
+from _ups_common import (
+    MONTHS,
+    TRACK_RE,
+    MONEY_RE,
+    DATE_RE_ANCHORED as DATE_RE,
+    default_year,
+    parse_year_from_page,
+    parse_page_number,
+    normalize_date_fr,
+)
 
-DATE_RE = re.compile(r"^(?P<d>\d{1,2})\s+(?P<m>[A-Za-zéûôîÉÛÔÎ]+)\b")
-TRACK_RE = re.compile(r"\b1Z[A-Z0-9]{16}\b")
-
-MONEY_RE = re.compile(r"\b\d{1,3}(?:[ \xa0]\d{3})*,\d{2}\b")
 BAD_CHARS_RE = re.compile(r"[<>|/\\]+")
 MULTISPACE_RE = re.compile(r"\s+")
 
@@ -41,10 +43,6 @@ SERVICE_TOKENS = ("Dom.", "Standard", "Express", "Saver", "Worldwide", "Expedite
 PKG_TAIL_RE = re.compile(r"(?i)\s*\bPKG\b\s*$")
 
 
-def default_year() -> str:
-    return str(datetime.now().year)
-
-
 def norm_line(s: str) -> str:
     s = (s or "").replace("\xa0", " ")
     s = BAD_CHARS_RE.sub(" ", s)
@@ -58,27 +56,6 @@ def strip_pkg_from_reference(ref: str) -> str:
         return ""
     ref = PKG_TAIL_RE.sub("", ref).strip()
     return ref
-
-
-def parse_page_number(text: str):
-    m = re.search(r"Page:\s*(\d+)\s+de\s+\d+", text or "")
-    return int(m.group(1)) if m else None
-
-
-def parse_year_from_page(text: str, default: str = None) -> str:
-    if default is None:
-        default = default_year()
-    m = re.search(r"Date facture\s+\d{1,2}\s+[A-Za-zéûôîÉÛÔÎ]+\s+(\d{4})", text or "")
-    return m.group(1) if m else default
-
-
-def normalize_date_fr(day: str, mon: str, year: str):
-    mon3 = mon[:3]
-    mon_num = MONTHS.get(mon3)
-    if not mon_num:
-        return None
-    dd = f"{int(day):02d}"
-    return f"{dd}/{mon_num}/{year}"
 
 
 def looks_like_reference(s: str) -> bool:

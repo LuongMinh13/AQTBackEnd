@@ -1,0 +1,265 @@
+/* =========================
+   Page Historique Palettes
+   Aligne ses conventions sur CarnetClients.css (toolbar + section + table)
+========================= */
+
+.hist {
+  padding-block: 8px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hist__header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hist__title {
+  margin: 0;
+  font-size: clamp(26px, 2.6vw, 36px);
+  font-weight: 800;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+}
+
+.hist__subtitle {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 15px;
+}
+
+/* ===== Toolbar (search) ===== */
+.hist__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.hist__search {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.hist__search-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.hist__search-input {
+  width: 100%;
+  padding: 8px 36px 8px 36px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.hist__search-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.hist__search-clear {
+  position: absolute;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.hist__search-clear:hover {
+  background: var(--color-hover);
+  color: var(--color-text);
+}
+
+/* ===== Section ===== */
+.hist__section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.hist__section-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.hist__empty {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.hist__error {
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--color-danger);
+  background: var(--color-danger-soft);
+  border: 1px solid var(--color-danger);
+  border-radius: 8px;
+}
+
+.hist__muted {
+  color: var(--color-text-subtle);
+  font-style: italic;
+}
+
+/* ===== Table ===== */
+.hist__table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+.hist__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.hist__table thead {
+  background: var(--color-bg);
+}
+
+.hist__table th {
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.hist__table td {
+  padding: 12px 14px;
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.hist__table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.hist__table tbody tr:hover {
+  background: var(--color-hover);
+}
+
+.hist__th-num,
+.hist__td-num {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.hist__th-right {
+  text-align: right;
+}
+
+.hist__td-date {
+  white-space: nowrap;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.hist__td-user {
+  color: var(--color-text-muted);
+}
+
+/* ===== Row actions ===== */
+.hist__row-actions {
+  display: inline-flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.hist__icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.hist__icon-btn svg {
+  flex-shrink: 0;
+}
+
+.hist__icon-btn:hover:not(:disabled) {
+  background: var(--color-hover);
+  color: var(--color-text);
+  border-color: var(--color-border-strong);
+}
+
+.hist__icon-btn--danger {
+  min-width: 28px;
+  justify-content: center;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.hist__icon-btn--danger:hover:not(:disabled) {
+  background: var(--color-danger);
+  color: #ffffff;
+  border-color: var(--color-danger);
+}
+
+.hist__icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 720px) {
+  .hist__row-actions {
+    flex-wrap: wrap;
+  }
+  .hist__icon-btn span {
+    display: none;
+  }
+  .hist__icon-btn {
+    padding: 6px 8px;
+  }
+}

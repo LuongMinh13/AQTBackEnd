@@ -1,5 +1,6 @@
 /* =========================
    Pickup Page (UPS/TNT/FedEx/DHL)
+   Couleurs via themes.css
 ========================= */
 
 .pickup-page {
@@ -19,13 +20,13 @@
   margin: 0;
   font-size: clamp(26px, 2.6vw, 36px);
   font-weight: 800;
-  color: #0f172a;
+  color: var(--color-text);
   letter-spacing: -0.02em;
 }
 
 .pickup-page__subtitle {
   margin: 0;
-  color: #64748b;
+  color: var(--color-text-muted);
   font-size: 15px;
 }
 
@@ -41,10 +42,10 @@
   flex-direction: column;
   gap: 18px;
   padding: 22px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 14px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  box-shadow: var(--shadow-sm);
 }
 
 .pickup-page__section-head {
@@ -52,21 +53,21 @@
   align-items: center;
   gap: 10px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .pickup-page__section-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #64748b;
+  color: var(--color-text-muted);
 }
 
 .pickup-page__section-title {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text);
 }
 
 /* Grid champs */
@@ -100,23 +101,24 @@
 }
 
 .pickup-page__btn--secondary {
-  color: #334155;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
 }
 
 .pickup-page__btn--secondary:hover:not(:disabled) {
-  background: #f8fafc;
+  background: var(--color-hover);
 }
 
 .pickup-page__btn--primary {
-  color: #ffffff;
-  background: #0f172a;
-  border: 1px solid #0f172a;
+  color: var(--color-primary-text);
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
 }
 
 .pickup-page__btn--primary:hover:not(:disabled) {
-  background: #1e293b;
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 
 .pickup-page__btn:disabled {
@@ -130,9 +132,9 @@
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
-  background: #dcfce7;
-  color: #166534;
-  border: 1px solid #bbf7d0;
+  background: var(--color-success-soft);
+  color: var(--color-success);
+  border: 1px solid var(--color-success);
   border-radius: 10px;
   font-size: 14px;
   font-weight: 500;

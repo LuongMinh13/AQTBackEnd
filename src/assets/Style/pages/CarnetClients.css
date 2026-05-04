@@ -1,0 +1,661 @@
+/* =========================
+   Page Carnet Clients
+========================= */
+
+.carnet {
+  padding-block: 8px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.carnet__header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.carnet__title {
+  margin: 0;
+  font-size: clamp(26px, 2.6vw, 36px);
+  font-weight: 800;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+}
+
+.carnet__subtitle {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 15px;
+}
+
+/* ===== Section ===== */
+.carnet__section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.carnet__section-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* ===== Formulaire ===== */
+.carnet__form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.carnet__grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.carnet__grid-4 {
+  display: grid;
+  grid-template-columns: 0.6fr 1.2fr 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 820px) {
+  .carnet__grid-4 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .carnet__grid-2,
+  .carnet__grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.carnet__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.carnet__label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+.carnet__req {
+  color: var(--color-danger);
+  margin-left: 2px;
+}
+
+.carnet__input {
+  width: 100%;
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.carnet__input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.carnet__textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  resize: vertical;
+  min-height: 80px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.carnet__textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.carnet__form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.carnet__submit-btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--color-primary);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.carnet__submit-btn:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+
+.carnet__submit-btn:disabled {
+  background: var(--color-text-subtle);
+  cursor: not-allowed;
+}
+
+.carnet__cancel-btn {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.carnet__cancel-btn:hover:not(:disabled) {
+  background: var(--color-hover);
+}
+
+.carnet__error {
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--color-danger);
+  background: var(--color-danger-soft);
+  border: 1px solid var(--color-danger);
+  border-radius: 8px;
+}
+
+.carnet__empty {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* ===== Liste ===== */
+.carnet__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.carnet__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  transition: border-color 0.15s ease;
+}
+
+.carnet__item:hover {
+  border-color: var(--color-border-strong);
+}
+
+.carnet__item-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.carnet__item-societe {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.carnet__item-adresse {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+  white-space: pre-line;
+}
+
+.carnet__item-meta {
+  margin: 2px 0 0 0;
+  font-size: 13px;
+  color: var(--color-text-subtle);
+}
+
+.carnet__item-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.carnet__icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.carnet__icon-btn svg {
+  flex-shrink: 0;
+}
+
+/* Petit badge "nb destinations" sur le bouton Carnet adresses */
+.carnet__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-primary-text);
+  background: var(--color-primary);
+  border-radius: 999px;
+}
+
+.carnet__icon-btn:hover:not(:disabled) {
+  background: var(--color-hover);
+  color: var(--color-text);
+  border-color: var(--color-border-strong);
+}
+
+.carnet__icon-btn--danger:hover:not(:disabled) {
+  background: var(--color-danger);
+  color: #ffffff;
+  border-color: var(--color-danger);
+}
+
+.carnet__icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .carnet__item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .carnet__item-actions {
+    justify-content: flex-end;
+  }
+}
+
+/* =========================
+   Barre d'actions : recherche + bouton ajouter
+========================= */
+.carnet__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.carnet__search {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.carnet__search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-subtle);
+  pointer-events: none;
+}
+
+.carnet__search-input {
+  width: 100%;
+  padding: 9px 38px 9px 36px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.carnet__search-input::placeholder {
+  color: var(--color-text-subtle);
+}
+
+.carnet__search-input:focus {
+  outline: none;
+  background: var(--color-surface);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.carnet__search-clear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.carnet__search-clear:hover {
+  background: var(--color-hover);
+  color: var(--color-text);
+}
+
+.carnet__add-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary-text);
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+  white-space: nowrap;
+}
+
+.carnet__add-btn:hover {
+  filter: brightness(0.92);
+}
+
+.carnet__add-btn svg {
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .carnet__toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .carnet__add-btn {
+    justify-content: center;
+  }
+}
+
+/* =========================
+   Modal (création / édition d'un client)
+========================= */
+.carnet__modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 1000;
+  animation: carnetFadeIn 0.15s ease-out;
+}
+
+.carnet__modal {
+  /* Variables réutilisées par les classes dp__ufield / dp__uinput / dp__inline-err
+     (à l'origine scopées à .dp dans DemandePalette.css). On les redéclare ici
+     pour que les soulignements et les états required/orange s'affichent
+     correctement dans le modal. */
+  --dp-red: #c8102e;
+  --dp-red-soft: #f6e2e6;
+  --dp-orange: #ff7a59;
+  --dp-line: #d6dadf;
+  --dp-line-strong: #1f2a36;
+  --dp-bg-soft: #f7f8fa;
+
+  width: 100%;
+  max-width: 760px;
+  max-height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: carnetScaleIn 0.18s ease-out;
+}
+
+.carnet__modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.carnet__modal-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.carnet__modal-head-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.carnet__add-btn--sm {
+  padding: 7px 12px;
+  font-size: 13px;
+  gap: 6px;
+}
+
+.carnet__modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.carnet__modal-close:hover {
+  background: var(--color-hover);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+/* Le formulaire à l'intérieur du modal devient scrollable si besoin */
+.carnet__modal .carnet__form {
+  padding: 20px 22px 22px 22px;
+  overflow-y: auto;
+}
+
+/* Plus d'air entre les lignes dans la grille du modal */
+.carnet__modal .dp__grid {
+  gap: 14px 20px;
+  padding-top: 4px;
+}
+
+@keyframes carnetFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes carnetScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .carnet__modal-overlay {
+    padding: 0;
+  }
+  .carnet__modal {
+    max-height: 100vh;
+    height: 100vh;
+    border-radius: 0;
+    border: none;
+  }
+}
+
+/* Variante large pour le modal "Carnet d'adresses" (table) */
+.carnet__modal--wide {
+  max-width: 1080px;
+}
+
+.carnet__modal-body {
+  padding: 18px 22px 22px 22px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.carnet__modal-disclaimer {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.carnet__modal-meta {
+  font-size: 12px;
+  color: var(--color-text-subtle);
+  font-weight: 600;
+}
+
+.carnet__modal-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+.carnet__modal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.carnet__modal-table thead th {
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  background: var(--color-surface-alt);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.carnet__modal-table tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.carnet__modal-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.carnet__modal-table tbody tr:hover {
+  background: var(--color-hover);
+}
+
+.carnet__th-right {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.carnet__modal-table .carnet__icon-btn {
+  padding: 4px 10px;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.carnet__modal-table .carnet__icon-btn.carnet__icon-btn--danger {
+  font-size: 16px;
+  padding: 4px 10px;
+}
+
+/* Petit groupe de boutons (Modifier + Supprimer) dans une cellule */
+.carnet__row-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: flex-end;
+}

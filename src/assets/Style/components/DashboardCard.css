@@ -1,5 +1,6 @@
 /* =========================
    DashboardCard
+   Couleurs via themes.css
 ========================= */
 
 .db-card {
@@ -7,10 +8,10 @@
   flex-direction: column;
   gap: 20px;
   padding: 24px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 14px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  box-shadow: var(--shadow-sm);
 }
 
 .db-card__header {
@@ -36,32 +37,32 @@
 }
 
 .db-card__icon--blue {
-  background: #dbeafe;
-  color: #2563eb;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
 }
 
 .db-card__icon--orange {
-  background: #ffedd5;
-  color: #ea580c;
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
 }
 
 .db-card__icon--green {
-  background: #dcfce7;
-  color: #16a34a;
+  background: var(--color-success-soft);
+  color: var(--color-success);
 }
 
 .db-card__title {
   margin: 0;
   font-size: 20px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text);
   line-height: 1.2;
 }
 
 .db-card__subtitle {
   margin: 0;
   font-size: 14px;
-  color: #64748b;
+  color: var(--color-text-muted);
   line-height: 1.4;
 }
 
@@ -87,9 +88,9 @@
   padding: 9px 16px;
   font-size: 14px;
   font-weight: 500;
-  color: #0f172a;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   transition: background-color 0.15s ease, border-color 0.15s ease;
   cursor: pointer;
@@ -97,6 +98,6 @@
 
 .db-card__footer button:hover,
 .db-card__footer .btn:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
+  background: var(--color-hover);
+  border-color: var(--color-border-strong);
 }

@@ -1,64 +1,22 @@
 import re
 import csv
 import sys
-from datetime import datetime
 from pathlib import Path
 import pdfplumber
 
-MONTHS = {
-    "Jan": "01", "Fév": "02", "Fev": "02", "Mar": "03", "Avr": "04", "Mai": "05", "Juin": "06",
-    "Juil": "07", "Aoû": "08", "Aou": "08", "Sep": "09", "Oct": "10", "Nov": "11", "Déc": "12", "Dec": "12"
-}
-
-MONEY_RE = re.compile(r"\b\d{1,3}(?:[ \xa0]\d{3})*,\d{2}\b")
-TRACK_RE = re.compile(r"\b1Z[A-Z0-9]{16}\b")
-DATE_RE = re.compile(r"^(?P<d>\d{1,2})\s+(?P<m>[A-Za-zéûôîÉÛÔÎ]+)\b")
-
-
-def default_year() -> str:
-    return str(datetime.now().year)
-
-
-def parse_page_number(text: str):
-    m = re.search(r"Page:\s*(\d+)\s+de\s+\d+", text)
-    return int(m.group(1)) if m else None
-
-
-def parse_year_from_page(text: str, default: str = None) -> str:
-    if default is None:
-        default = default_year()
-    m = re.search(r"Date facture\s+\d{1,2}\s+[A-Za-zéûôîÉÛÔÎ]+\s+(\d{4})", text or "")
-    return m.group(1) if m else default
-
-
-def fr_money_to_float(s: str):
-    if not s:
-        return None
-    s = s.replace("\xa0", " ").strip()
-    s = s.replace(" ", "")
-    s = s.replace(",", ".")
-    try:
-        return float(s)
-    except Exception:
-        return None
-
-
-def float_to_fr_money(x):
-    if x is None or x == "":
-        return ""
-    try:
-        return f"{float(x):.2f}".replace(".", ",")
-    except Exception:
-        return ""
-
-
-def normalize_date_fr(day: str, mon: str, year: str):
-    mon3 = mon[:3]
-    mon_num = MONTHS.get(mon3)
-    if not mon_num:
-        return None
-    dd = f"{int(day):02d}"
-    return f"{dd}/{mon_num}/{year}"
+# Helpers partagés
+from _ups_common import (
+    MONTHS,
+    MONEY_RE,
+    TRACK_RE,
+    DATE_RE_ANCHORED as DATE_RE,
+    default_year,
+    parse_year_from_page,
+    parse_page_number,
+    fr_money_to_float,
+    float_to_fr_money,
+    normalize_date_fr,
+)
 
 
 def clean_reference_lines(chunk_lines):

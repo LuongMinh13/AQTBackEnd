@@ -1,5 +1,6 @@
 /* =========================
    StatCard
+   Couleurs via themes.css
 ========================= */
 
 .stat-card {
@@ -7,7 +8,7 @@
   flex-direction: column;
   gap: 8px;
   padding: 16px 18px;
-  background: #f8fafc;
+  background: var(--color-surface-alt);
   border-radius: 10px;
   border: 1px solid transparent;
 }
@@ -17,7 +18,7 @@
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  color: #64748b;
+  color: var(--color-text-muted);
 }
 
 .stat-card__icon {
@@ -33,19 +34,19 @@
 .stat-card__value {
   font-size: 28px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text);
   line-height: 1.1;
 }
 
 /* Tones */
 .stat-card--neutral .stat-card__icon {
-  color: #64748b;
+  color: var(--color-text-muted);
 }
 
 .stat-card--success .stat-card__icon {
-  color: #16a34a;
+  color: var(--color-success);
 }
 
 .stat-card--info .stat-card__icon {
-  color: #2563eb;
+  color: var(--color-primary);
 }

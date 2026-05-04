@@ -18,6 +18,9 @@ import PickupDHL from "./pages/pickups/PickupDHL";
 
 // Autres pages
 import Palettes from "./pages/Palettes";
+import DemandePalette from "./pages/DemandePalette";
+import PaletteHistorique from "./pages/PaletteHistorique";
+import CarnetClients from "./pages/CarnetClients";
 import Connection from "./pages/Connection";
 
 function App() {
@@ -44,6 +47,16 @@ function App() {
 
           {/* Palettes */}
           <Route path="/palettes" element={<Palettes />} />
+          <Route path="/palettes/demande" element={<DemandePalette />} />
+          <Route path="/palettes/historique" element={<PaletteHistorique />} />
+
+          {/* Carnet clients (à part) */}
+          <Route path="/clients" element={<CarnetClients />} />
+          {/* Rétro-compat : ancienne URL → nouvelle */}
+          <Route
+            path="/palettes/clients"
+            element={<Navigate to="/clients" replace />}
+          />
 
           {/* Connection */}
           <Route path="/connection" element={<Connection />} />

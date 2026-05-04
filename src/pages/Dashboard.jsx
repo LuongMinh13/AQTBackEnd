@@ -85,22 +85,7 @@ export default function Dashboard() {
               ))}
             </>
           }
-        >
-          <div className="dashboard__stats">
-            <StatCard
-              icon={IconActivity}
-              label="Fichiers totaux"
-              value="0"
-              tone="neutral"
-            />
-            <StatCard
-              icon={IconCheck}
-              label="Traités"
-              value="0"
-              tone="success"
-            />
-          </div>
-        </DashboardCard>
+        />
 
         {/* Carte Enlèvements */}
         <DashboardCard
@@ -143,19 +128,19 @@ export default function Dashboard() {
           icon={IconPalette}
           iconTone="green"
           title="Demande Palette"
-          subtitle="Importez un devis DHL et pré-remplissez les adresses pour vos expéditions de palettes."
+          subtitle="Générez automatiquement le fichier Excel DHL Freight à envoyer en demande de tarifs."
           footer={
             <button
               type="button"
-              onClick={() => navigate(ROUTES.palettes)}
+              onClick={() => navigate(ROUTES.palette("demande"))}
             >
-              Accéder au module
+              Nouvelle demande
             </button>
           }
         >
           <div className="dashboard__info-box">
-            Automatisez la saisie des adresses d'enlèvement et de livraison
-            dans vos fichiers Excel DHL.
+            Pré-remplissez l'expéditeur depuis votre carnet, saisissez les
+            palettes, cliquez sur générer — le fichier est prêt à envoyer.
           </div>
         </DashboardCard>
       </div>

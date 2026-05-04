@@ -1,0 +1,222 @@
+/* ==========================================================
+   Thèmes de l'application
+   ----------------------------------------------------------
+   4 thèmes disponibles, activés via data-theme sur <html> :
+     (par défaut)      → Light / Normal
+     [data-theme=dark] → Dark
+     [data-theme=pride]→ Pride (rose + arc-en-ciel)
+     [data-theme=subaru]→ Subaru (WRX rally)
+
+   Toutes les couleurs du projet passent par ces variables
+   pour rester cohérentes avec le thème actif.
+========================================================== */
+
+:root {
+  /* Surfaces — palette "Slate Pro" : fond gris bleuté, cards blanches qui
+     ressortent, bordures plus marquées pour bien séparer les modules. */
+  --color-bg: #eef2f7;
+  --color-surface: #ffffff;
+  --color-surface-alt: #e2e8f0;
+  --color-border: #cbd5e1;
+  --color-border-strong: #94a3b8;
+
+  /* Texte (text-muted assombri pour mieux contraster sur fond bleuté) */
+  --color-text: #0f172a;
+  --color-text-muted: #475569;
+  --color-text-subtle: #64748b;
+
+  /* Accent primaire */
+  --color-primary: #2563eb;
+  --color-primary-hover: #1e40af;
+  --color-primary-soft: #dbeafe;
+  --color-primary-text: #ffffff;
+
+  /* Sémantique */
+  --color-success: #16a34a;
+  --color-success-soft: #dcfce7;
+  --color-danger: #dc2626;
+  --color-danger-soft: #fee2e2;
+  --color-warning: #ea580c;
+  --color-warning-soft: #ffedd5;
+
+  /* Hover gris (survols neutres) — un cran plus marqué pour rester visible
+     sur le nouveau fond gris bleuté */
+  --color-hover: #e2e8f0;
+  --color-active: #cbd5e1;
+
+  /* Logo brand (carré à gauche de BackOfficeMBE) */
+  --color-brand-bg: #0f172a;
+  --color-brand-text: #ffffff;
+
+  /* Ombres */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.1),
+               0 2px 4px -2px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.1),
+               0 4px 6px -2px rgba(15, 23, 42, 0.05);
+
+  /* Bande décorative (utilisée en haut de la navbar pour pride/subaru) */
+  --accent-strip: transparent;
+  --accent-gradient: none;
+}
+
+/* ==========================================================
+   🌙 Dark
+========================================================== */
+[data-theme="dark"] {
+  --color-bg: #0f172a;
+  --color-surface: #1e293b;
+  --color-surface-alt: #334155;
+  --color-border: #334155;
+  --color-border-strong: #475569;
+
+  --color-text: #f8fafc;
+  --color-text-muted: #94a3b8;
+  --color-text-subtle: #64748b;
+
+  --color-primary: #3b82f6;
+  --color-primary-hover: #60a5fa;
+  --color-primary-soft: #1e3a8a;
+  --color-primary-text: #ffffff;
+
+  --color-success: #22c55e;
+  --color-success-soft: #14532d;
+  --color-danger: #ef4444;
+  --color-danger-soft: #7f1d1d;
+  --color-warning: #f97316;
+  --color-warning-soft: #7c2d12;
+
+  --color-hover: #334155;
+  --color-active: #475569;
+
+  --color-brand-bg: #3b82f6;
+  --color-brand-text: #ffffff;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5),
+               0 2px 4px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.6),
+               0 4px 6px -2px rgba(0, 0, 0, 0.4);
+
+  --accent-strip: transparent;
+  --accent-gradient: none;
+}
+
+/* ==========================================================
+   🌈 Pride
+========================================================== */
+[data-theme="pride"] {
+  --color-bg: #fdf2f8;
+  --color-surface: #ffffff;
+  --color-surface-alt: #fce7f3;
+  --color-border: #fbcfe8;
+  --color-border-strong: #f9a8d4;
+
+  --color-text: #500724;
+  --color-text-muted: #be185d;
+  --color-text-subtle: #db2777;
+
+  --color-primary: #ec4899;
+  --color-primary-hover: #db2777;
+  --color-primary-soft: #fce7f3;
+  --color-primary-text: #ffffff;
+
+  --color-success: #16a34a;
+  --color-success-soft: #dcfce7;
+  --color-danger: #dc2626;
+  --color-danger-soft: #fee2e2;
+  --color-warning: #ea580c;
+  --color-warning-soft: #ffedd5;
+
+  --color-hover: #fce7f3;
+  --color-active: #fbcfe8;
+
+  --color-brand-bg: #ec4899;
+  --color-brand-text: #ffffff;
+
+  --shadow-sm: 0 1px 2px rgba(236, 72, 153, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(236, 72, 153, 0.15),
+               0 2px 4px -2px rgba(236, 72, 153, 0.1);
+  --shadow-lg: 0 10px 25px -5px rgba(236, 72, 153, 0.2),
+               0 4px 6px -2px rgba(236, 72, 153, 0.1);
+
+  /* Bande arc-en-ciel en haut de la navbar */
+  --accent-strip: linear-gradient(
+    90deg,
+    #e40303 0%,
+    #ff8c00 20%,
+    #ffed00 40%,
+    #008026 60%,
+    #004dff 80%,
+    #750787 100%
+  );
+  --accent-gradient: linear-gradient(
+    90deg,
+    #e40303,
+    #ff8c00,
+    #ffed00,
+    #008026,
+    #004dff,
+    #750787
+  );
+}
+
+/* ==========================================================
+   🏁 Subaru (WRX Rally)
+========================================================== */
+[data-theme="subaru"] {
+  --color-bg: #0a2b6d;
+  --color-surface: #133f8f;
+  --color-surface-alt: #1e5bc6;
+  --color-border: #1e5bc6;
+  --color-border-strong: #3b82f6;
+
+  --color-text: #ffffff;
+  --color-text-muted: #b8c8e0;
+  --color-text-subtle: #93a4c1;
+
+  --color-primary: #ffd700;
+  --color-primary-hover: #ffc107;
+  --color-primary-soft: #3b4c8f;
+  --color-primary-text: #0a2b6d;
+
+  --color-success: #10b981;
+  --color-success-soft: #064e3b;
+  --color-danger: #e30613;
+  --color-danger-soft: #7f1d1d;
+  --color-warning: #f59e0b;
+  --color-warning-soft: #78350f;
+
+  --color-hover: #1e5bc6;
+  --color-active: #3b82f6;
+
+  --color-brand-bg: #ffd700;
+  --color-brand-text: #0a2b6d;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5),
+               0 2px 4px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.6),
+               0 4px 6px -2px rgba(0, 0, 0, 0.4);
+
+  /* Bande rouge STI en haut de la navbar */
+  --accent-strip: #e30613;
+  --accent-gradient: linear-gradient(
+    90deg,
+    #e30613 0%,
+    #e30613 33%,
+    #ffd700 33%,
+    #ffd700 66%,
+    #ffffff 66%,
+    #ffffff 100%
+  );
+}
+
+/* ==========================================================
+   Body : applique le fond + la couleur de texte du thème actif
+========================================================== */
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}

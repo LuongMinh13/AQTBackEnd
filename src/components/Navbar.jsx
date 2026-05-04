@@ -1,6 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
-import { INVOICE_CARRIERS, PICKUP_CARRIERS, ROUTES } from "../utils/constants";
+import {
+  INVOICE_CARRIERS,
+  PALETTE_SECTIONS,
+  PICKUP_CARRIERS,
+  ROUTES,
+} from "../utils/constants";
+import ThemeSwitcher from "./ThemeSwitcher";
 import "../assets/Style/components/Navbar.css";
 
 export default function Navbar() {
@@ -138,14 +144,17 @@ export default function Navbar() {
             )}
           </li>
 
-          {/* Palettes */}
-          <li>
-            <NavLink
-              to={ROUTES.palettes}
-              className={({ isActive }) =>
-                "navbar__link" + (isActive ? " is-active" : "")
+          {/* Palettes dropdown — Nouvelle demande + Historique */}
+          <li className="navbar__dropdown-wrap">
+            <button
+              type="button"
+              className={
+                "navbar__link navbar__dropdown-btn" +
+                (openMenu === "palettes" ? " is-open" : "")
               }
-              onClick={closeMenu}
+              onClick={() => toggleMenu("palettes")}
+              aria-expanded={openMenu === "palettes"}
+              aria-haspopup="true"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="5" r="3" />
@@ -153,9 +162,51 @@ export default function Navbar() {
                 <circle cx="19" cy="17" r="3" />
               </svg>
               Palettes
+              <svg className="navbar__caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            {openMenu === "palettes" && (
+              <ul className="navbar__menu">
+                {PALETTE_SECTIONS.map((s) => (
+                  <li key={s.slug}>
+                    <NavLink
+                      to={ROUTES.palette(s.slug)}
+                      className="navbar__menu-item"
+                      onClick={closeMenu}
+                    >
+                      {s.label}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+
+          {/* Carnet clients — entrée de menu indépendante */}
+          <li>
+            <NavLink
+              to={ROUTES.clients}
+              className={({ isActive }) =>
+                "navbar__link" + (isActive ? " is-active" : "")
+              }
+              onClick={closeMenu}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                <circle cx="12" cy="10" r="2.5" />
+                <path d="M9 16c.7-1.5 2-2.3 3-2.3s2.3.8 3 2.3" />
+              </svg>
+              Carnet clients
             </NavLink>
           </li>
         </ul>
+
+        {/* Sélecteur de thème à droite */}
+        <div className="navbar__actions">
+          <ThemeSwitcher />
+        </div>
       </div>
     </nav>
   );

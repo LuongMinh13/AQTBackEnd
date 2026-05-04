@@ -1,58 +1,19 @@
 import re
 import csv
 import sys
-from datetime import datetime
 from pathlib import Path
 import pdfplumber
 
-
-def compute_prix_vente(prix_net):
-    if prix_net is None:
-        return None
-    if abs(prix_net - 0.58) < 0.001:
-        return 0.80
-    if abs(prix_net - 2.17) < 0.001:
-        return 2.80
-    return None
-
-
-MONTHS = {
-    "Jan": "01", "Fév": "02", "Fev": "02", "Mar": "03", "Avr": "04", "Mai": "05",
-    "Juin": "06", "Juil": "07", "Aoû": "08", "Aou": "08", "Sep": "09", "Oct": "10",
-    "Nov": "11", "Déc": "12", "Dec": "12"
-}
-
-
-def default_year() -> str:
-    return str(datetime.now().year)
-
-
-def fr_money_to_float(s: str):
-    if not s:
-        return None
-    s = s.replace("\xa0", " ").strip()
-    s = s.replace(" ", "")
-    s = s.replace(",", ".")
-    try:
-        return float(s)
-    except Exception:
-        return None
-
-
-def float_to_fr_money(x):
-    if x is None or x == "":
-        return ""
-    try:
-        return f"{float(x):.2f}".replace(".", ",")
-    except Exception:
-        return ""
-
-
-def parse_year_from_page(text: str, default: str = None) -> str:
-    if default is None:
-        default = default_year()
-    m = re.search(r"Date facture\s+\d{1,2}\s+[A-Za-zéûôîÉÛÔÎ]+\s+(\d{4})", text or "")
-    return m.group(1) if m else default
+# Helpers partagés (incluant la table tarifaire externalisée)
+from _ups_common import (
+    MONTHS,
+    default_year,
+    parse_year_from_page,
+    fr_money_to_float,
+    float_to_fr_money,
+    compute_prix_vente,
+    PRIX_VENTE_TABLE,  # exposé pour tests/debug si besoin
+)
 
 
 def parse_date_demande_from_dem_raw(dem_raw: str, year: str):

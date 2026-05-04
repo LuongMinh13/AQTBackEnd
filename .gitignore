@@ -38,6 +38,13 @@ backend/data/tmp/
 backend/.env
 backend/*.env.local
 
+# Données runtime sensibles (carnet clients + historique des demandes Palette)
+backend/data/clients.json
+backend/data/palettes-history.json
+
+# Backups de templates
+backend/data/templates/*.bak
+
 # Secrets / env
 .env
 .env.*
